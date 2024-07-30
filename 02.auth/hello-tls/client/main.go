@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	pb "github.com/gzltommy/grpc_test/02.authentication/proto/hello"
+	pb "github.com/gzltommy/grpc_test/02.auth/proto/hello"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials" // 引入grpc认证包
