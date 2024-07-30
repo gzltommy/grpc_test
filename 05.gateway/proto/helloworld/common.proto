@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package helloworld;
+
+option go_package = "github.com/gzltommy/grpc_test/test/proto/helloworld";
+
+message BroadcastInfo {
+  int64 Id = 1;// id
+  string Content = 2;// 广播内容
+  int32 Cycles = 3;// 广播循环次数
+  int64 BeginTimestamp = 4;// 广播开始时间
+  int64 EndTimestamp = 5; // 广播结束时间
+}
