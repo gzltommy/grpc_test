@@ -1,0 +1,26 @@
+// upload.proto
+
+syntax = "proto3";
+
+package rpc;
+
+option go_package = "github.com/gzltommy/grpc_test/01.simple/proto/rpc;rpc";
+
+//上传服务
+//请求接受一个UploadReq
+//响应回发多条数据（"true" or "false")
+service Upload {
+  rpc Upload (stream UploadReq) returns (UploadRes) {
+  }
+}
+
+message UploadReq {
+  string path = 1; // 文件路径
+  int64 offset = 2; // 偏移量
+  int64 size = 3; // 大小
+  bytes data = 4; // 二进制数据
+}
+
+message UploadRes {
+  string msg = 1;
+}
