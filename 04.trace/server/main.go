@@ -40,10 +40,10 @@ func main() {
 		grpclog.Fatalf("failed to listen: %v", err)
 	}
 
-	// 实例化grpc Server
+	// 实例化 grpc Server
 	s := grpc.NewServer()
 
-	// 注册HelloService
+	// 注册 HelloService
 	pb.RegisterHelloServer(s, HelloService)
 
 	// 开启trace
