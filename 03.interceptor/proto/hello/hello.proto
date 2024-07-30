@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package hello;
 
-option go_package = "interceptor_grpc/proto/hello";
+option go_package = "github.com/gzltommy/grpc_test/02.interceptor/proto/hello;hello";
 
 // 定义Hello服务
 service Hello {

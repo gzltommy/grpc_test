@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"google.golang.org/grpc/credentials/insecure"
 	"time"
 
-	pb "interceptor_grpc/proto/hello" // 引入proto包
+	pb "github.com/gzltommy/grpc_test/03.interceptor/proto/hello" // 引入proto包
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -48,7 +49,7 @@ func main() {
 		}
 		opts = append(opts, grpc.WithTransportCredentials(creds))
 	} else {
-		opts = append(opts, grpc.WithInsecure())
+		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	}
 
 	// 指定自定义认证
@@ -56,7 +57,7 @@ func main() {
 	// 指定客户端interceptor
 	opts = append(opts, grpc.WithUnaryInterceptor(interceptor))
 
-	conn, err := grpc.Dial(Address, opts...)
+	conn, err := grpc.NewClient(Address, opts...)
 	if err != nil {
 		grpclog.Fatalln(err)
 	}

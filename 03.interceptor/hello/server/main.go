@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"google.golang.org/grpc/status"
 	"net"
 
-	pb "interceptor_grpc/proto/hello"
+	pb "github.com/gzltommy/grpc_test/03.interceptor/proto/hello"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -20,7 +21,9 @@ const (
 )
 
 // 定义helloService并实现约定的接口
-type helloService struct{}
+type helloService struct {
+	pb.UnimplementedHelloServer
+}
 
 // HelloService Hello服务
 var HelloService = helloService{}
@@ -49,13 +52,13 @@ func main() {
 
 	opts = append(opts, grpc.Creds(creds))
 
-	// 注册interceptor
+	// 注册 interceptor
 	opts = append(opts, grpc.UnaryInterceptor(interceptor))
 
 	// 实例化grpc Server
 	s := grpc.NewServer(opts...)
 
-	// 注册HelloService
+	// 注册 HelloService
 	pb.RegisterHelloServer(s, HelloService)
 
 	fmt.Println("Listen on " + Address + " with TLS + Token + Interceptor")
@@ -67,7 +70,7 @@ func main() {
 func auth(ctx context.Context) error {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return grpc.Errorf(codes.Unauthenticated, "无Token认证信息")
+		return status.Errorf(codes.Unauthenticated, "无Token认证信息")
 	}
 
 	var (
@@ -84,7 +87,7 @@ func auth(ctx context.Context) error {
 	}
 
 	if appid != "101010" || appkey != "i am key" {
-		return grpc.Errorf(codes.Unauthenticated, "Token认证信息无效: appid=%s, appkey=%s", appid, appkey)
+		return status.Errorf(codes.Unauthenticated, "Token认证信息无效: appid=%s, appkey=%s", appid, appkey)
 	}
 
 	return nil

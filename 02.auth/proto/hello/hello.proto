@@ -3,7 +3,7 @@ syntax = "proto3";
 package hello;
 
 
-option go_package = "github.com/gzltommy/grpc_test/02.authentication/proto/hello;hello";
+option go_package = "github.com/gzltommy/grpc_test/02.auth/proto/hello;hello";
 
 // 定义Hello服务
 service Hello {
