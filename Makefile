@@ -4,7 +4,7 @@
 proto:
 	protoc --go_out=. --go_opt=paths=source_relative \
 	    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-	    ./03.interceptor/proto/hello/*.proto
+	    ./04.trace/proto/hello/*.proto
 
 # --proto_path 或 -I 指定 protoc 的工作目录
 # --go_out 选项是用来指定 protoc-gen-go 插件的工作方式 和 go 代码目录架构的生成位置的模式（有 3 种模式，如 source_relative 模式），可以向 --go_out 传递多参数

@@ -5,7 +5,7 @@ import (
 	"net"
 	"net/http"
 
-	pb "trace_grpc/proto/hello" // 引入编译生成的包
+	pb "github.com/gzltommy/grpc_test/04.trace/proto/hello" // 引入编译生成的包
 
 	"golang.org/x/net/context"
 	"golang.org/x/net/trace"
@@ -19,7 +19,9 @@ const (
 )
 
 // 定义helloService并实现约定的接口
-type helloService struct{}
+type helloService struct {
+	pb.UnimplementedHelloServer
+}
 
 // HelloService Hello服务
 var HelloService = helloService{}
