@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-// 语法使用 protocol buffer proto3
+package rpc;
 
 option go_package = "github.com/gzltommy/grpc_test/01.simple/proto/rpc;rpc";
 

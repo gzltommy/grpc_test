@@ -34,7 +34,7 @@ func NewChatClient(cc grpc.ClientConnInterface) ChatClient {
 }
 
 func (c *chatClient) BidStream(ctx context.Context, opts ...grpc.CallOption) (Chat_BidStreamClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Chat_ServiceDesc.Streams[0], "/Chat/BidStream", opts...)
+	stream, err := c.cc.NewStream(ctx, &Chat_ServiceDesc.Streams[0], "/rpc.Chat/BidStream", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func (x *chatBidStreamServer) Recv() (*Request, error) {
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Chat_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Chat",
+	ServiceName: "rpc.Chat",
 	HandlerType: (*ChatServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{

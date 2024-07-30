@@ -1,10 +1,14 @@
 # Makefile
 
 .PHONY: proto
-proto:
-	protoc --go_out=. --go_opt=paths=source_relative \
-	    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-	    ./02.authentication/proto/hello/*.proto
+proto:	
+	cd proto
+	protoc -I . --go_out=plugins=grpc,Mgoogle/protobuf/descriptor.proto=github.com/golang/protobuf/protoc-gen-go/descriptor:. google/api/*.proto
+	protoc -I . --go_out=plugins=grpc,Mgoogle/api/annotations.proto=github.com/jergoo/go-grpc-example/proto/google/api:. hello_http/*.proto
+	protoc --grpc-gateway_out=logtostderr=true:. hello_http/hello_http.proto
+	cd -
+	
+	
 
 # --proto_path 或 -I 指定 protoc 的工作目录
 # --go_out 选项是用来指定 protoc-gen-go 插件的工作方式 和 go 代码目录架构的生成位置的模式（有 3 种模式，如 source_relative 模式），可以向 --go_out 传递多参数
