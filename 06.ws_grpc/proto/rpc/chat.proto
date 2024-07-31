@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package rpc;
+
+option go_package = "github.com/gzltommy/grpc_test/06.ws_grpc/proto/rpc";
+
+service Chat {
+  rpc BidStream(stream Request) returns (stream Response) {}
+}
+
+// 请求数据 Request格式定义
+message Request {
+  string input = 1;
+}
+
+// 响应数据Response格式定义
+message Response {
+  string output = 1;
+}

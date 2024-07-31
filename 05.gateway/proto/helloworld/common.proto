@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package helloworld;
 
-option go_package = "github.com/gzltommy/grpc_test/test/proto/helloworld";
+option go_package = "github.com/gzltommy/grpc_test/05.gateway/proto/helloworld";
 
 message BroadcastInfo {
   int64 Id = 1;// id

@@ -9,7 +9,6 @@
 package helloworld
 
 import (
-	helloworld "github.com/gzltommy/grpc_test/test/proto/helloworld"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -78,8 +77,8 @@ type HelloReply struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Message    string                      `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
-	Broadcasts []*helloworld.BroadcastInfo `protobuf:"bytes,2,rep,name=Broadcasts,proto3" json:"Broadcasts,omitempty"`
+	Message    string           `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Broadcasts []*BroadcastInfo `protobuf:"bytes,2,rep,name=Broadcasts,proto3" json:"Broadcasts,omitempty"`
 }
 
 func (x *HelloReply) Reset() {
@@ -121,7 +120,7 @@ func (x *HelloReply) GetMessage() string {
 	return ""
 }
 
-func (x *HelloReply) GetBroadcasts() []*helloworld.BroadcastInfo {
+func (x *HelloReply) GetBroadcasts() []*BroadcastInfo {
 	if x != nil {
 		return x.Broadcasts
 	}
@@ -173,9 +172,9 @@ func file_helloworld_hello_world_proto_rawDescGZIP() []byte {
 
 var file_helloworld_hello_world_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_helloworld_hello_world_proto_goTypes = []any{
-	(*HelloRequest)(nil),             // 0: helloworld.HelloRequest
-	(*HelloReply)(nil),               // 1: helloworld.HelloReply
-	(*helloworld.BroadcastInfo)(nil), // 2: helloworld.BroadcastInfo
+	(*HelloRequest)(nil),  // 0: helloworld.HelloRequest
+	(*HelloReply)(nil),    // 1: helloworld.HelloReply
+	(*BroadcastInfo)(nil), // 2: helloworld.BroadcastInfo
 }
 var file_helloworld_hello_world_proto_depIdxs = []int32{
 	2, // 0: helloworld.HelloReply.Broadcasts:type_name -> helloworld.BroadcastInfo
@@ -193,6 +192,7 @@ func file_helloworld_hello_world_proto_init() {
 	if File_helloworld_hello_world_proto != nil {
 		return
 	}
+	file_helloworld_common_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_helloworld_hello_world_proto_msgTypes[0].Exporter = func(v any, i int) any {
 			switch v := v.(*HelloRequest); i {
