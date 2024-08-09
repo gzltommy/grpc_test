@@ -18,6 +18,31 @@ const (
 	Address = "127.0.0.1:8080"
 )
 
+func main() {
+	listen, err := net.Listen("tcp", Address)
+	if err != nil {
+		grpclog.Fatalf("failed to listen: %v", err)
+	}
+
+	// TLS认证
+	creds, err := credentials.NewServerTLSFromFile("../../keys/server.pem", "../../keys/server.key")
+	if err != nil {
+		grpclog.Fatalf("Failed to generate credentials %v", err)
+	}
+
+	// 实例化 grpc Server, 并开启 TLS 认证
+	s := grpc.NewServer(grpc.Creds(creds))
+
+	// 注册 HelloService
+	pb.RegisterHelloServer(s, helloService{})
+
+	fmt.Println("Listen on " + Address + " with TLS + Token")
+
+	// 阻塞
+	err = s.Serve(listen)
+	_ = err
+}
+
 // 定义helloService并实现约定的接口
 type helloService struct {
 	pb.UnimplementedHelloServer
@@ -52,29 +77,4 @@ func (h helloService) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.He
 	resp.Message = fmt.Sprintf("Hello %s.\nToken info: appid=%s,appkey=%s", in.Name, appid, appkey)
 
 	return resp, nil
-}
-
-func main() {
-	listen, err := net.Listen("tcp", Address)
-	if err != nil {
-		grpclog.Fatalf("failed to listen: %v", err)
-	}
-
-	// TLS认证
-	creds, err := credentials.NewServerTLSFromFile("../../keys/server.pem", "../../keys/server.key")
-	if err != nil {
-		grpclog.Fatalf("Failed to generate credentials %v", err)
-	}
-
-	// 实例化 grpc Server, 并开启 TLS 认证
-	s := grpc.NewServer(grpc.Creds(creds))
-
-	// 注册 HelloService
-	pb.RegisterHelloServer(s, helloService{})
-
-	fmt.Println("Listen on " + Address + " with TLS + Token")
-
-	// 阻塞
-	err = s.Serve(listen)
-	_ = err
 }
