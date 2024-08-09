@@ -15,18 +15,6 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type server struct {
-	helloworldpb.UnimplementedGreeterServer
-}
-
-func NewServer() *server {
-	return &server{}
-}
-
-func (s *server) SayHello(ctx context.Context, in *helloworldpb.HelloRequest) (*helloworldpb.HelloReply, error) {
-	return &helloworldpb.HelloReply{Message: in.Name + " world"}, nil
-}
-
 func main() {
 	// Create a listener on TCP port
 	lis, err := net.Listen("tcp", ":8091")
@@ -69,4 +57,16 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 			otherHandler.ServeHTTP(w, r)
 		}
 	}), &http2.Server{})
+}
+
+type server struct {
+	helloworldpb.UnimplementedGreeterServer
+}
+
+func NewServer() *server {
+	return &server{}
+}
+
+func (s *server) SayHello(ctx context.Context, in *helloworldpb.HelloRequest) (*helloworldpb.HelloReply, error) {
+	return &helloworldpb.HelloReply{Message: in.Name + " world"}, nil
 }

@@ -10,11 +10,11 @@ option go_package = "github.com/gzltommy/grpc_test/05.gateway/proto/helloworld";
 import "google/api/annotations.proto";
 import "helloworld/common.proto";
 
-// 定义一个Greeter服务
+// 定义一个 Greeter 服务
 service Greeter {
   // 打招呼方法
   rpc SayHello (HelloRequest) returns (HelloReply) {
-    // 这里添加了google.api.http注释
+    // 这里添加了google.api.http 注释
     option (google.api.http) = {
       post: "/v1/example/echo"
       body: "*"
@@ -22,7 +22,7 @@ service Greeter {
   }
 }
 
-// 定义请求的message
+// 定义请求的 message
 message HelloRequest {
   string name = 1;
 }
