@@ -40,7 +40,6 @@ func (c customCredential) RequireTransportSecurity() bool {
 func main() {
 	var err error
 	var opts []grpc.DialOption
-
 	if OpenTLS {
 		// TLS连接
 		creds, err := credentials.NewClientTLSFromFile("../../keys/server.pem", "www.hello.com")
@@ -55,7 +54,7 @@ func main() {
 	// 指定自定义认证
 	opts = append(opts, grpc.WithPerRPCCredentials(new(customCredential)))
 
-	// 指定客户端interceptor
+	// 指定客户端 interceptor
 	opts = append(opts, grpc.WithUnaryInterceptor(interceptor))
 
 	conn, err := grpc.NewClient(Address, opts...)

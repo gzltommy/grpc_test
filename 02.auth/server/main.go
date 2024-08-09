@@ -15,7 +15,7 @@ import (
 
 const (
 	// Address gRPC服务地址
-	Address = "127.0.0.1:50052"
+	Address = "127.0.0.1:8080"
 )
 
 // 定义helloService并实现约定的接口
@@ -23,10 +23,7 @@ type helloService struct {
 	pb.UnimplementedHelloServer
 }
 
-// HelloService ...
-var HelloService = helloService{}
-
-// SayHello 实现Hello服务接口
+// SayHello 实现 Hello 服务接口
 func (h helloService) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloResponse, error) {
 	// 解析 metada 中的信息并验证
 	md, ok := metadata.FromIncomingContext(ctx)
@@ -69,11 +66,11 @@ func main() {
 		grpclog.Fatalf("Failed to generate credentials %v", err)
 	}
 
-	// 实例化grpc Server, 并开启 TLS 认证
+	// 实例化 grpc Server, 并开启 TLS 认证
 	s := grpc.NewServer(grpc.Creds(creds))
 
 	// 注册 HelloService
-	pb.RegisterHelloServer(s, HelloService)
+	pb.RegisterHelloServer(s, helloService{})
 
 	fmt.Println("Listen on " + Address + " with TLS + Token")
 

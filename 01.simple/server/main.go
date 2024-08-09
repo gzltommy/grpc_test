@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	lis, err := net.Listen("tcp", ":6012")
+	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -19,9 +19,9 @@ func main() {
 	s := grpc.NewServer()
 
 	// 向这个服务端对象注册服务
-	rpc.RegisterLoginServer(s, &LoginServer{})
-	rpc.RegisterUploadServer(s, &UploadServer{})
-	rpc.RegisterDownloadServer(s, &DownloadServer{})
+	//rpc.RegisterLoginServer(s, &LoginServer{})
+	//rpc.RegisterUploadServer(s, &UploadServer{})
+	//rpc.RegisterDownloadServer(s, &DownloadServer{})
 	rpc.RegisterChatServer(s, &ChatServer{})
 
 	// 注册服务端反射服务

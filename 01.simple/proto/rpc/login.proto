@@ -11,6 +11,8 @@ option go_package = "github.com/gzltommy/grpc_test/01.simple/proto/rpc;rpc";// ;
 service Login {
   rpc Login (LoginReq) returns (LoginRes) {
   }
+  rpc Logout (LoginReq) returns (LoginRes) {
+  }
 }
 
 message LoginReq {

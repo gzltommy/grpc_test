@@ -12,7 +12,7 @@ import (
 
 const (
 	// Address gRPC服务地址
-	Address = "127.0.0.1:50052"
+	Address = "127.0.0.1:8080"
 
 	// OpenTLS 是否开启TLS认证
 	OpenTLS = true
@@ -36,7 +36,6 @@ func (c customCredential) RequireTransportSecurity() bool {
 
 func main() {
 	var opts []grpc.DialOption
-
 	if OpenTLS {
 		// TLS连接
 		creds, err := credentials.NewClientTLSFromFile("../../keys/server.pem", "www.hello.com")
@@ -50,21 +49,18 @@ func main() {
 
 	// 使用自定义认证
 	opts = append(opts, grpc.WithPerRPCCredentials(new(customCredential)))
-
 	conn, err := grpc.NewClient(Address, opts...)
-
 	if err != nil {
 		grpclog.Fatalln(err)
 	}
-
 	defer conn.Close()
 
 	// 初始化客户端
-	c := pb.NewHelloClient(conn)
+	rpcClient := pb.NewHelloClient(conn)
 
 	// 调用方法
 	req := &pb.HelloRequest{Name: "gRPC"}
-	res, err := c.SayHello(context.Background(), req)
+	res, err := rpcClient.SayHello(context.Background(), req)
 	if err != nil {
 		grpclog.Fatalln(err)
 	}

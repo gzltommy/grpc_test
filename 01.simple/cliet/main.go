@@ -10,19 +10,21 @@ import (
 func main() {
 	//创立 grpc 连接
 	//grpcConn, err := grpc.Dial("127.0.0.1:6012", grpc.WithInsecure())
-	grpcConn, err := grpc.NewClient("127.0.0.1:6012", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	grpcConn, err := grpc.NewClient("127.0.0.1:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalln(err)
 	}
+	grpcConn.GetState()
 
 	// 登录
-	Login(grpcConn)
+	//Login(grpcConn)
+	//LoginOut(grpcConn)
 
 	// 上传
-	Upload(grpcConn)
+	//Upload(grpcConn)
 
 	// 下载
-	Download(grpcConn)
+	//Download(grpcConn)
 
 	// 聊天
 	BidStream(grpcConn)

@@ -3,8 +3,11 @@ package main
 import (
 	"bufio"
 	"context"
+	"fmt"
 	"github.com/gzltommy/grpc_test/01.simple/proto/rpc"
+	"github.com/pkg/errors"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 	"io"
 	"log"
 	"os"
@@ -17,8 +20,10 @@ func BidStream(grpcConn *grpc.ClientConn) {
 	client := rpc.NewChatClient(grpcConn)
 
 	//设置ctx超时（根据情况设定）
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
+
+	//ctx := context.Background()
 
 	// 创建双向数据流
 	stream, err := client.BidStream(ctx)
@@ -49,9 +54,13 @@ func BidStream(grpcConn *grpc.ClientConn) {
 			break //如果收到结束信号，则退出“接收循环”，结束客户端程序
 		}
 
+		if errors.As(err, status.Error) {
+			fmt.Println("=======超时拉=======")
+		}
+
 		if err != nil {
 			// TODO: 处理接收错误
-			log.Println("接收数据出错:", err)
+			log.Printf("接收数据出错:%T,%v", err, err)
 		}
 
 		// 没有错误的情况下，打印来自服务端的消息

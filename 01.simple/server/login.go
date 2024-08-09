@@ -15,8 +15,17 @@ type LoginServer struct {
 func (*LoginServer) Login(ctx context.Context, req *rpc.LoginReq) (*rpc.LoginRes, error) {
 	//为降低复杂度，此处不对 ctx 进行处理
 	if req.Username == "root" && req.Password == "123456" {
-		return &rpc.LoginRes{Msg: "true"}, nil
+		return &rpc.LoginRes{Msg: "登录成功"}, nil
 	} else {
-		return &rpc.LoginRes{Msg: "false"}, nil
+		return &rpc.LoginRes{Msg: "登录失败"}, nil
+	}
+}
+
+func (*LoginServer) Logout(ctx context.Context, req *rpc.LoginReq) (*rpc.LoginRes, error) {
+	//为降低复杂度，此处不对 ctx 进行处理
+	if req.Username == "root" && req.Password == "123456" {
+		return &rpc.LoginRes{Msg: "退出成功"}, nil
+	} else {
+		return &rpc.LoginRes{Msg: "退出失败"}, nil
 	}
 }
