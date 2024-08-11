@@ -1,0 +1,63 @@
+version: "3.3"
+services:
+  redis:
+    image: redis:latest
+    restart: "no"
+    container_name: redisX
+    ports:
+      - "6379:6379"
+    volumes:
+      - /data/mydata/redis/db:/data
+    networks:
+      - app-net
+
+  rabbitmq:
+    image: rabbitmq:3.7.7-management
+    restart: "no"
+    container_name: rabbitmqX
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  mysql:
+    image: mysql:latest
+    restart: "no"
+    container_name: mysqlX
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - LANG=C.UTF-8
+    ports:
+      - "3306:3306"
+    volumes:
+      - /data/mydata/mysql/db:/var/lib/mysql
+    networks:
+      - app-net
+
+  consul:
+    image: consul:1.15.4
+    restart: "no"
+    container_name: consulX
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+    command: agent -dev -ui -client 0.0.0.0
+    networks:
+      - app-net
+#  api:
+#    image: api:latest
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: api
+#    restart: "no"
+#    depends_on:
+##      - rabbitmq
+#      - redis
+#    ports:
+#      - "8002:8002"
+#    networks:
+#      - app-net
+
+networks:
+  app-net:
+    driver: bridge
