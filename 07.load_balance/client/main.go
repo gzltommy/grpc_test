@@ -42,7 +42,6 @@ func main() {
 	defer conn.Close()
 
 	client := proto.NewHelloClient(conn)
-
 	for i := 0; i < 12; i++ {
 		resp, err := client.Hi(context.Background(), &emptypb.Empty{})
 		if err != nil {

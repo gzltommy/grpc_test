@@ -64,7 +64,7 @@ func main() {
 		log.Fatalf("注册服务失败: %s", err.Error())
 	}
 
-	fmt.Printf("服务启动成功;PORT:%d\n", serverPort)
+	fmt.Printf("服务启动成功;%s:%d\n", serverHostIp, serverPort)
 	err = server.Serve(listen)
 }
 
