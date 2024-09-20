@@ -17,8 +17,8 @@ func main() {
 	grpcConn.GetState()
 
 	// 登录
-	//Login(grpcConn)
-	//LoginOut(grpcConn)
+	Login(grpcConn)
+	LoginOut(grpcConn)
 
 	// 上传
 	//Upload(grpcConn)
@@ -27,5 +27,5 @@ func main() {
 	//Download(grpcConn)
 
 	// 聊天
-	BidStream(grpcConn)
+	//BidStream(grpcConn)
 }

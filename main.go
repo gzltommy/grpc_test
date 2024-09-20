@@ -1,44 +1,78 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
-	"net"
-	"strings"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/stathat/consistent"
 )
 
-func main() {
-	ip := getHostIp()
-	fmt.Println(ip)
+const (
+	dbUser     = "user"
+	dbPassword = "password"
+	dbHost     = "localhost"
+	dbPort     = "3306"
+)
 
+var (
+	consistentHash *consistent.Consistent
+	dbPools        map[string]*sql.DB
+)
+
+func init() {
+	// 初始化一致性哈希实例
+	consistentHash = consistent.New()
+
+	// 初始化数据库连接池
+	dbPools = make(map[string]*sql.DB)
 }
 
-// getHostIp1 借助 net.InterfaceAddrs 方法（多网卡时，不推荐）
-func getHostIp1() string {
-	addrList, err := net.InterfaceAddrs()
+// 1、创建了连接池
+func addDBPool(dbName string) {
+	// 添加数据库实例到一致性哈希
+	consistentHash.Add(dbName)
+
+	// 创建数据库连接池并添加到 dbPools
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPassword, dbHost, dbPort, dbName)
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		fmt.Println("get current host ip err: ", err)
-		return ""
+		panic(err)
 	}
-	var ip string
-	for _, address := range addrList {
-		if ipNet, ok := address.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
-			if ipNet.IP.To4() != nil {
-				ip = ipNet.IP.String()
-				break
-			}
-		}
-	}
-	return ip
+
+	dbPools[dbName] = db
 }
 
-// getHostIp (推荐)使用 udp 不需要关注是否送达，只需要对应的 ip 和 port 正确，即可获取到 IP 地址
-func getHostIp() string {
-	conn, err := net.Dial("udp", "8.8.8.8:53")
+// 2、获取数据库连接
+// 创建一个函数来根据键（比如用户 ID）获取对应的数据库连接
+func getDBConnectionByKey(key string) (*sql.DB, error) {
+	dbName, err := consistentHash.Get(key)
 	if err != nil {
-		fmt.Println("get current host ip err: ", err)
-		return ""
+		return nil, err
 	}
-	addr := conn.LocalAddr().(*net.UDPAddr)
-	ip := strings.Split(addr.String(), ":")[0]
-	return ip
+
+	db, ok := dbPools[dbName]
+	if !ok {
+		return nil, fmt.Errorf("no db connection found for dbName: %s", dbName)
+	}
+
+	return db, nil
+}
+
+// 3.执行 SQL 语句
+func getUserById(userId string) (*User, error) {
+	db, err := getDBConnectionByKey(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	user := &User{}
+	err = db.QueryRow("SELECT id, name, email FROM users WHERE id = ?", userId).Scan(&user.Id, &user.Name, &user.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+type User struct {
 }
